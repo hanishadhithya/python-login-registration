@@ -1,0 +1,140 @@
+def register():
+    
+    db = open('registerDB.txt','r')
+    Email = input('Enter your Username / Email : ')
+    d = []
+    num = ['0','1','2','3','4','5','6','7','8','9']
+    sym = ['#','$','%','&','@','!','^','*']
+    for line in db:
+        x = line.split(',')
+        d.append(x[0])
+
+# Condintions for Email
+
+    if Email in d:
+        print('Username / Email is already Used. Please try with new one.')
+        register()
+    elif Email.count('@') != 1 and Email.count('.') != 1:
+        print('Invalid Username / Email')
+        register()
+    elif Email[0] in num:
+        print('Username / Email should not start with number')
+        register()
+    elif Email[0] in sym:
+        print('Username / Email should not start with symbols')
+        register()
+    else:
+        print('Your Username / Email is available for use')
+    
+    
+    password = input('Enter Your Password (It should have atleast one letter in both upper and lower case, one integer and one special character): ' )
+    val = True
+
+# Conditions for password
+
+    if len(password) < 5:
+        print('Your password should have atleast 5 characters')
+        val = False
+    if len(password) > 16:
+        print('Your password should have atleast 16 characters')
+        vaL = False
+    if not any (char in sym for char in password):
+        print('Your password should have atleast one symbol')
+        val = False
+    if not any (char.isdigit() for char in password):
+        print('Your password should have atleast a number')
+        val = False
+    if not any (char.isupper() for char in password):
+        print('Your password should have atleast one uppercase character')
+        val = False   
+    if not any (char.islower() for char in password):
+        print('Your password should have atleast one lowercase character')
+        val = False
+    else :
+        val = True
+        
+#Confirm password
+        
+    if val:
+        confirm_password = input("Confirm Password : ")
+        while (confirm_password != password):
+            print("Password not match")
+            register()
+          
+# Save Email and password in a file
+        
+    file = open('RegisterDB.txt','a')
+    file.write(Email +','+password +'\n')
+    file.close()
+    print('Your Account is successfullty created')
+    
+def login():
+    Remail = input('Enter your Username / Email to login : ')
+    Remail = Remail.strip()
+    db = open('registerDB.txt','r')
+    d = []
+    for line in db:
+        x= line.split(',')
+        d.append(x[0])
+    if Remail in d:
+        Rpassword = input('Enter your password : ')
+        Rpassword = Rpassword.strip()
+        file1 = open('registerDB.txt','r').readlines()
+        for x in file1:
+            x = x.strip()
+            y = x.split(',')
+            if Remail == y[0] and Rpassword == y[1]:
+                print(f' Login successful, Welcome{Remail}')
+                
+            elif Remail == y[0] and Rpassword != y[1]:
+                Fpassword = input('Forgot password[Y/N] :')
+                if Fpassword == 'N':
+                    login()
+                if Fpassword == 'Y':
+                    password = input('Enter Your Password (It should have atleast one letter in both upper and lower case, one integer and one special character): ' )
+                    sym = ['#','$','%','&','@','!','^','*']
+                    val = True
+
+                    if len(password) < 5:
+                        print('Your password should have atleast 5 characters')
+                        val = False
+                    if len(password) > 16:
+                        print('Your password should have atleast 16 characters')
+                        val = False
+                    if not any (char in sym for char in password):
+                        print('Your password should have atleast one symbol')
+                        val = False
+                    if not any (char.isdigit() for char in password):
+                        print('Your password should have atleast a number')
+                        val = False
+                    if not any (char.isupper() for char in password):
+                        print('Your password should have atleast one uppercase character')
+                        val = False   
+                    if not any (char.islower() for char in password):
+                        print('Your password should have atleast one lowercase character')
+                        val = False
+                    else :
+                        val = True
+        
+        
+                    if val:
+                        confirm_password = input("Confirm Password : ")
+                        while (confirm_password != password):
+                            print("Password not match")
+                            register()
+                    file = open('registerDB.txt','a')
+                    file.write(Remail + ',' + password + '\n')
+                
+    else:
+        print("You are not a registered User. Please register")
+        register()
+        
+
+                
+def welcome():
+    welcome = input(' Please select R - Register, L - Login :')
+    if welcome == 'R':
+        register()
+    elif welcome == 'L':
+        login()
+welcome()
